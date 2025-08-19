@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+#define debug(x) cout << '[' << #x << " is: " << x << "] " << endl;
+#define imod(a , n) (a % n + n ) % n
+
+#define fastio ios_base::sync_with_stdio(false);cin.tie(0);
+#define inF freopen("lazy.in","r",stdin );
+#define outF freopen("lazy.out" , "w" , stdout ) ;
+#define sor(v) sort(v.begin() , v.end());
+#define print(v) for(auto f : v ) cout << f << " " ;
+#define rsor(v) sort(v.rbegin() , v.rend());
+#define rev(v) reverse(v.begin() , v.end());
+#define scan(v) for(auto &it : v)cin >> it ;
+
+#define logar(x , y) log(x) / log(y)
+#define __sum(n) n * (n + 1) / 2
+#define __lcm(a , b) a / __gcd(a , b) * b
+#define pii pair<int , int >
+#define ll long long
+#define int ll
+#define matrix vector<vector<ll>>
+#define pii pair<int , int >
+const int N = 2e5 + 7, M = 4 * N;
+
+const int di[] = {0 , 0 , 1 , -1};
+const int dj[] = {1 , -1 , 0 , 0};
+
+
+int32_t main()
+
+{
+
+    fastio;
+    inF;outF;
+
+    int n , k ;
+    cin >> n >> k ;
+
+    int arr[n][n];
+    for(int i = 0 ; i < n ; i ++){
+        for(int j = 0 ; j < n ; j ++)cin >> arr[i][j];
+
+    }
+    int arr2[2*n][2*n] {};
+
+    for(int i = 0 ;i < n; i ++){
+        for(int j = 0 ;j < n ; j ++)arr2[i-j+n-1][i+j] = arr[i][j] ;
+
+    }
+    ll sum[2*n][2*n]{};
+
+    for(int i = 0 ; i < n * 2 ; i ++){
+        for(int j = 0 ; j < 2 * n ; j ++){
+            sum[i][j] = arr2[i][j] ;
+            if(i - 1 >= 0)sum[i][j] += sum[i-1][j];
+            if(j - 1 >= 0)sum[i][j] += sum[i][j - 1];
+            if(i - 1 >= 0 && j - 1 >= 0)sum[i][j] -= sum[i-1][j-1];
+
+        }
+    }
+
+
+
+    ll mx = 0 ;
+
+    for(int i = 0 ; i < 2 * n ; i ++){
+
+        for(int j = 0 ; j < n * 2 ; j ++){
+            int mxi = min(2 * n - 1 , i + k) , mxj = min(2 * n - 1 , j + k);
+            int mni = max(0*1ll , i - k ) , mnj = max(0 * 1ll , j - k);
+
+            ll currSum = sum[mxi][mxj] ;
+            if(mni)currSum -= sum[mni-1][mxj];
+            if(mnj)currSum -= sum[mxi][mnj-1];
+            if(mnj&&mni)currSum += sum[mni-1][mnj-1];
+
+
+            mx = max(mx ,currSum );
+        }
+    }
+
+    cout << mx ;
+}
+
